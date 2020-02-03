@@ -4,7 +4,6 @@ using System;
 using System.Net.Http;
 using System.Text;
 using System.Text.Json;
-using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -28,8 +27,10 @@ namespace TvDBTestingClient
 
             var response = await base.SendAsync(request, cancellationToken);
 
-            if(response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+            if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
             {
+                var serializerOptions = new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase };
+
                 _logger.LogInformation("Unauthorized request. Trying to get valid token.");
 
                 // Get token from TvDB
@@ -42,13 +43,13 @@ namespace TvDBTestingClient
                 {
                     Method = HttpMethod.Post,
                     RequestUri = new Uri($"{_options.BaseAddress}/login"),
-                    Content = new StringContent(JsonSerializer.Serialize(authData), Encoding.UTF8, "application/json")
+                    Content = new StringContent(JsonSerializer.Serialize(authData, serializerOptions), Encoding.UTF8, "application/json")
                 };
 
                 var authResponse = await base.SendAsync(authRequest, cancellationToken);
-                var token = await JsonSerializer.DeserializeAsync<TokenResponse>(await authResponse.Content.ReadAsStreamAsync());
+                var token = await JsonSerializer.DeserializeAsync<TokenResponse>(await authResponse.Content.ReadAsStreamAsync(), serializerOptions);
 
-                if(!authResponse.IsSuccessStatusCode || string.IsNullOrEmpty(token.Token))
+                if (!authResponse.IsSuccessStatusCode || string.IsNullOrEmpty(token.Token))
                 {
                     _logger.LogInformation("Failed to get token.");
                     return response;
@@ -68,10 +69,9 @@ namespace TvDBTestingClient
             return response;
         }
     }
-    
+
     internal class TokenResponse
     {
-        [JsonPropertyName("token")]
         public string Token { get; set; }
     }
 
