@@ -1,4 +1,4 @@
-﻿namespace TvDBTestingClient
+﻿namespace TvDBClient
 {
     public class TvdbClientOptions
     {

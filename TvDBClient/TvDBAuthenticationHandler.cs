@@ -7,17 +7,22 @@ using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace TvDBTestingClient
+namespace TvDBClient
 {
-    class TvDBAuthenticationHandler : DelegatingHandler
+    internal class TvDBAuthenticationHandler : DelegatingHandler
     {
         private readonly TvdbClientOptions _options;
         private readonly ILogger<TvDBAuthenticationHandler> _logger;
+        private readonly TvDBTokenHolder _tokenHolder;
 
-        public TvDBAuthenticationHandler(IOptions<TvdbClientOptions> options, ILogger<TvDBAuthenticationHandler> logger)
+        public TvDBAuthenticationHandler(
+            IOptions<TvdbClientOptions> options,
+            ILogger<TvDBAuthenticationHandler> logger,
+            TvDBTokenHolder tokenHolder)
         {
             _options = options.Value;
             _logger = logger;
+            _tokenHolder = tokenHolder;
         }
 
         protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request,
@@ -25,6 +30,7 @@ namespace TvDBTestingClient
         {
             _logger.LogInformation("Starting request");
 
+            SetAuthorization(request, _tokenHolder.Token);
             var response = await base.SendAsync(request, cancellationToken);
 
             if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
@@ -57,7 +63,9 @@ namespace TvDBTestingClient
 
                 _logger.LogInformation("Got valid token. Retrying request.");
 
-                request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("bearer", token.Token);
+                _tokenHolder.Token = token.Token;
+                SetAuthorization(request, _tokenHolder.Token);
+
                 response = await base.SendAsync(request, cancellationToken);
 
                 _logger.LogInformation($"Finished request");
@@ -67,6 +75,11 @@ namespace TvDBTestingClient
             _logger.LogInformation($"Finished request");
 
             return response;
+        }
+
+        private static void SetAuthorization(HttpRequestMessage request, string token)
+        {
+            request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("bearer", token);
         }
     }
 
