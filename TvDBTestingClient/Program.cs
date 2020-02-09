@@ -22,14 +22,13 @@ namespace TvDBTestingClient
             services.AddTvDBClient(options =>
             {
                 options.ApiKey = "<API-KEY>";
-                options.BaseAddress = "https://api.thetvdb.com";
             });
 
             var provider = services.BuildServiceProvider();
 
             var tvdb = provider.GetService<TvDbClient>();
 
-            var show = await tvdb.GetShow(328724);
+            var show = await tvdb.Series.GetAsync(328724);
         }
     }
 }

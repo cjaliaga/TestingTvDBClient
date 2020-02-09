@@ -35,8 +35,6 @@ namespace TvDBClient
 
             if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
             {
-                var serializerOptions = new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase };
-
                 _logger.LogInformation("Unauthorized request. Trying to get valid token.");
 
                 // Get token from TvDB
@@ -49,11 +47,11 @@ namespace TvDBClient
                 {
                     Method = HttpMethod.Post,
                     RequestUri = new Uri($"{_options.BaseAddress}/login"),
-                    Content = new StringContent(JsonSerializer.Serialize(authData, serializerOptions), Encoding.UTF8, "application/json")
+                    Content = new StringContent(JsonSerializer.Serialize(authData, JsonSerializerOptionsProvider.Options), Encoding.UTF8, "application/json")
                 };
 
                 var authResponse = await base.SendAsync(authRequest, cancellationToken);
-                var token = await JsonSerializer.DeserializeAsync<TokenResponse>(await authResponse.Content.ReadAsStreamAsync(), serializerOptions);
+                var token = await JsonSerializer.DeserializeAsync<TokenResponse>(await authResponse.Content.ReadAsStreamAsync(), JsonSerializerOptionsProvider.Options);
 
                 if (!authResponse.IsSuccessStatusCode || string.IsNullOrEmpty(token.Token))
                 {
