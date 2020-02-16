@@ -1,9 +1,8 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using TvDBClient.Models;
-using TvDBClient.Search;
 
-namespace TvDBClient.Clients
+namespace TvDBClient.Search
 {
     /// <summary>
     /// Used for searching for a particular series by name, imdb ID or Zap2It ID

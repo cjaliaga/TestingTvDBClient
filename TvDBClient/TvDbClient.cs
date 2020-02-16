@@ -1,5 +1,5 @@
 ﻿using System.Net.Http;
-using TvDBClient.Clients;
+using TvDBClient.Search;
 using TvDBClient.Series;
 
 namespace TvDBClient
@@ -9,6 +9,7 @@ namespace TvDBClient
         public TvDbClient(HttpClient client)
         {
             Series = new SeriesClient(client);
+            Search = new SearchClient(client);
         }
 
         public ISeriesClient Series { get;}

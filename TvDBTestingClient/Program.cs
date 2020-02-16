@@ -41,6 +41,10 @@ namespace TvDBTestingClient
                 .IncludeId()
                 .IncludeAirsDayOfWeek();
             });
+
+            var search = await tvdb.Search.SearchSeriesByNameAsync("sheldon");
+
+            search = await tvdb.Search.SearchSeriesBySlugAsync("young-sheldon");
         }
     }
 }
