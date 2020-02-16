@@ -1,11 +1,13 @@
-﻿using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
-using System;
+﻿using System;
+using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 
 namespace TvDBClient
 {
@@ -13,27 +15,25 @@ namespace TvDBClient
     {
         private readonly TvdbClientOptions _options;
         private readonly ILogger<TvDBAuthenticationHandler> _logger;
-        private readonly TvDBTokenHolder _tokenHolder;
+        private readonly TokenAccessor _tokenAccessor;
 
         public TvDBAuthenticationHandler(
             IOptions<TvdbClientOptions> options,
             ILogger<TvDBAuthenticationHandler> logger,
-            TvDBTokenHolder tokenHolder)
+            TokenAccessor tokenAccessor)
         {
             _options = options.Value;
             _logger = logger;
-            _tokenHolder = tokenHolder;
+            _tokenAccessor = tokenAccessor;
         }
 
         protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request,
         CancellationToken cancellationToken)
         {
-            _logger.LogInformation("Starting request");
-
-            SetAuthorization(request, _tokenHolder.Token);
+            SetAuthorization(request, _tokenAccessor.Token);
             var response = await base.SendAsync(request, cancellationToken);
 
-            if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+            if (response.StatusCode == HttpStatusCode.Unauthorized)
             {
                 _logger.LogInformation("Unauthorized request. Trying to get valid token.");
 
@@ -61,23 +61,20 @@ namespace TvDBClient
 
                 _logger.LogInformation("Got valid token. Retrying request.");
 
-                _tokenHolder.Token = token.Token;
-                SetAuthorization(request, _tokenHolder.Token);
+                _tokenAccessor.Token = token.Token;
+                SetAuthorization(request, _tokenAccessor.Token);
 
                 response = await base.SendAsync(request, cancellationToken);
 
-                _logger.LogInformation($"Finished request");
                 return response;
             }
-
-            _logger.LogInformation($"Finished request");
 
             return response;
         }
 
         private static void SetAuthorization(HttpRequestMessage request, string token)
         {
-            request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("bearer", token);
+            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
         }
     }
 

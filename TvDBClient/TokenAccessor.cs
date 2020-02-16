@@ -1,6 +1,6 @@
 ﻿namespace TvDBClient
 {
-    internal class TvDBTokenHolder
+    internal class TokenAccessor
     {
         public string Token { get; set; }
     }

@@ -1,9 +1,7 @@
-﻿using System;
+﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using System.Net.Http;
-using System.Threading.Tasks;
-using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Logging;
+using System.Threading.Tasks;
 using TvDBClient;
 
 namespace TvDBTestingClient
@@ -19,16 +17,28 @@ namespace TvDBTestingClient
                 configure.AddConsole();
             });
 
+            var configuration = new ConfigurationBuilder()
+                .AddUserSecrets(assembly: typeof(Program).Assembly)
+                .Build();
+
             services.AddTvDBClient(options =>
             {
-                options.ApiKey = "<API-KEY>";
+                options.ApiKey = configuration["ApiKey"];
             });
-
             var provider = services.BuildServiceProvider();
 
             var tvdb = provider.GetService<TvDbClient>();
 
             var show = await tvdb.Series.GetAsync(328724);
+
+            show = await tvdb.Series.GetAsync(328724, keys =>
+            {
+                keys
+                .IncludeAdded()
+                .IncludeSeriesName()
+                .IncludeBanner()
+                .IncludeId();
+            });
         }
     }
 }

@@ -12,7 +12,7 @@ namespace Microsoft.Extensions.DependencyInjection
 
             services.Configure(configureOptions);
 
-            services.AddScoped<TvDBTokenHolder>();
+            services.AddScoped<TokenAccessor>();
 
             services.AddTransient<TvDBAuthenticationHandler>();
 

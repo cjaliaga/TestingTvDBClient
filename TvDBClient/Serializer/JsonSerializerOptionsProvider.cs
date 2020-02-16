@@ -15,7 +15,6 @@ namespace TvDBClient
                     _options = new JsonSerializerOptions
                     {
                         PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-                        //PropertyNameCaseInsensitive = true, 
                     };
 
                     _options.Converters.Add(new StringToNullableIntegerConverter());

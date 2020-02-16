@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Text;
 using System.Text.Json;
+using System.Threading;
 using System.Threading.Tasks;
 using TvDBClient;
 
@@ -21,7 +19,7 @@ namespace System.Net.Http
         /// <param name="httpClient">The <see cref="HttpClient"/>.</param>
         /// <param name="requestUri">The URI that the request will be sent to.</param>
         /// <returns>The response parsed as an object of the generic type.</returns>
-        public static async Task<T> GetJsonAsync<T>(this HttpClient httpClient, string requestUri)
+        public static async Task<T> GetJsonAsync<T>(this HttpClient httpClient, string requestUri, CancellationToken cancellationToken = default)
         {
             var stringContent = await httpClient.GetStringAsync(requestUri);
             return JsonSerializer.Deserialize<T>(stringContent, JsonSerializerOptionsProvider.Options);
@@ -35,8 +33,8 @@ namespace System.Net.Http
         /// <param name="requestUri">The URI that the request will be sent to.</param>
         /// <param name="content">Content for the request body. This will be JSON-encoded and sent as a string.</param>
         /// <returns>The response parsed as an object of the generic type.</returns>
-        public static Task PostJsonAsync(this HttpClient httpClient, string requestUri, object content)
-            => httpClient.SendJsonAsync(HttpMethod.Post, requestUri, content);
+        public static Task PostJsonAsync(this HttpClient httpClient, string requestUri, object content, CancellationToken cancellationToken = default)
+            => httpClient.SendJsonAsync(HttpMethod.Post, requestUri, content, cancellationToken);
 
         /// <summary>
         /// Sends a POST request to the specified URI, including the specified <paramref name="content"/>
@@ -47,8 +45,8 @@ namespace System.Net.Http
         /// <param name="requestUri">The URI that the request will be sent to.</param>
         /// <param name="content">Content for the request body. This will be JSON-encoded and sent as a string.</param>
         /// <returns>The response parsed as an object of the generic type.</returns>
-        public static Task<T> PostJsonAsync<T>(this HttpClient httpClient, string requestUri, object content)
-            => httpClient.SendJsonAsync<T>(HttpMethod.Post, requestUri, content);
+        public static Task<T> PostJsonAsync<T>(this HttpClient httpClient, string requestUri, object content, CancellationToken cancellationToken = default)
+            => httpClient.SendJsonAsync<T>(HttpMethod.Post, requestUri, content, cancellationToken);
 
         /// <summary>
         /// Sends a PUT request to the specified URI, including the specified <paramref name="content"/>
@@ -57,8 +55,8 @@ namespace System.Net.Http
         /// <param name="httpClient">The <see cref="HttpClient"/>.</param>
         /// <param name="requestUri">The URI that the request will be sent to.</param>
         /// <param name="content">Content for the request body. This will be JSON-encoded and sent as a string.</param>
-        public static Task PutJsonAsync(this HttpClient httpClient, string requestUri, object content)
-            => httpClient.SendJsonAsync(HttpMethod.Put, requestUri, content);
+        public static Task PutJsonAsync(this HttpClient httpClient, string requestUri, object content, CancellationToken cancellationToken = default)
+            => httpClient.SendJsonAsync(HttpMethod.Put, requestUri, content, cancellationToken);
 
         /// <summary>
         /// Sends a PUT request to the specified URI, including the specified <paramref name="content"/>
@@ -69,8 +67,8 @@ namespace System.Net.Http
         /// <param name="requestUri">The URI that the request will be sent to.</param>
         /// <param name="content">Content for the request body. This will be JSON-encoded and sent as a string.</param>
         /// <returns>The response parsed as an object of the generic type.</returns>
-        public static Task<T> PutJsonAsync<T>(this HttpClient httpClient, string requestUri, object content)
-            => httpClient.SendJsonAsync<T>(HttpMethod.Put, requestUri, content);
+        public static Task<T> PutJsonAsync<T>(this HttpClient httpClient, string requestUri, object content, CancellationToken cancellationToken = default)
+            => httpClient.SendJsonAsync<T>(HttpMethod.Put, requestUri, content, cancellationToken);
 
         /// <summary>
         /// Sends an HTTP request to the specified URI, including the specified <paramref name="content"/>
@@ -80,8 +78,8 @@ namespace System.Net.Http
         /// <param name="method">The HTTP method.</param>
         /// <param name="requestUri">The URI that the request will be sent to.</param>
         /// <param name="content">Content for the request body. This will be JSON-encoded and sent as a string.</param>
-        public static Task SendJsonAsync(this HttpClient httpClient, HttpMethod method, string requestUri, object content)
-            => httpClient.SendJsonAsync<IgnoreResponse>(method, requestUri, content);
+        public static Task SendJsonAsync(this HttpClient httpClient, HttpMethod method, string requestUri, object content, CancellationToken cancellationToken = default)
+            => httpClient.SendJsonAsync<IgnoreResponse>(method, requestUri, content, cancellationToken);
 
         /// <summary>
         /// Sends an HTTP request to the specified URI, including the specified <paramref name="content"/>
@@ -93,13 +91,13 @@ namespace System.Net.Http
         /// <param name="requestUri">The URI that the request will be sent to.</param>
         /// <param name="content">Content for the request body. This will be JSON-encoded and sent as a string.</param>
         /// <returns>The response parsed as an object of the generic type.</returns>
-        public static async Task<T> SendJsonAsync<T>(this HttpClient httpClient, HttpMethod method, string requestUri, object content)
+        public static async Task<T> SendJsonAsync<T>(this HttpClient httpClient, HttpMethod method, string requestUri, object content, CancellationToken cancellationToken = default)
         {
             var requestJson = JsonSerializer.Serialize(content, JsonSerializerOptionsProvider.Options);
             var response = await httpClient.SendAsync(new HttpRequestMessage(method, requestUri)
             {
                 Content = new StringContent(requestJson, Encoding.UTF8, "application/json")
-            });
+            }, cancellationToken);
 
             // Make sure the call was successful before we
             // attempt to process the response content
