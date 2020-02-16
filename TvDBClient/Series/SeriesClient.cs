@@ -5,8 +5,9 @@ using System.Threading;
 using System.Threading.Tasks;
 using TvDBClient.Models;
 using System.Linq;
+using TvDBClient.Episodes;
 
-namespace TvDBClient
+namespace TvDBClient.Series
 {
     internal class SeriesClient : ISeriesClient
     {
@@ -22,16 +23,16 @@ namespace TvDBClient
             return await _client.GetJsonAsync<TvDbResponse<Actor[]>>($"/series/{seriesId}/actors", cancellationToken).ConfigureAwait(false);
         }
 
-        public async Task<TvDbResponse<Series>> GetAsync(int seriesId, CancellationToken cancellationToken = default)
+        public async Task<TvDbResponse<Serie>> GetAsync(int seriesId, CancellationToken cancellationToken = default)
         {
-            return await _client.GetJsonAsync<TvDbResponse<Series>>($"/series/{seriesId}").ConfigureAwait(false);
+            return await _client.GetJsonAsync<TvDbResponse<Serie>>($"/series/{seriesId}").ConfigureAwait(false);
         }
 
-        public async Task<TvDbResponse<Series>> GetAsync(int seriesId, Action<SerieKeys> configureKeys, CancellationToken cancellationToken = default)
+        public async Task<TvDbResponse<Serie>> GetAsync(int seriesId, Action<SerieKeys> configureKeys, CancellationToken cancellationToken = default)
         {
             var keys = new SerieKeys();
             configureKeys(keys);
-            return await _client.GetJsonAsync<TvDbResponse<Series>>($"/series/{seriesId}/filter?keys={keys}", cancellationToken).ConfigureAwait(false);
+            return await _client.GetJsonAsync<TvDbResponse<Serie>>($"/series/{seriesId}/filter?keys={keys}", cancellationToken).ConfigureAwait(false);
         }
 
         public async Task<TvDbResponse<EpisodeRecord[]>> GetEpisodesAsync(int seriesId, int page, CancellationToken cancellationToken = default)

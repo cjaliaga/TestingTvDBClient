@@ -37,7 +37,7 @@ namespace TvDBClient
 
         internal static string ToPascalCase(this string name)
         {
-            char[] array = name.ToCharArray();
+            var array = name.ToCharArray();
 
             array[0] = char.ToLower(array[0]);
 

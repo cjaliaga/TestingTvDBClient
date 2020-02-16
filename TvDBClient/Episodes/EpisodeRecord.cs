@@ -1,12 +1,5 @@
-﻿namespace TvDBClient.Models
+﻿namespace TvDBClient.Episodes
 {
-    public class EpisodeLanguage
-    {
-        public string EpisodeName { get; set; }
-
-        public string Overview { get; set; }
-    }
-
     public class EpisodeRecord
     {
         public int? AbsoluteNumber { get; set; }
@@ -72,9 +65,9 @@
         public string ThumbWidth { get; set; }
 
         public string[] Writers { get; set; }
-        
+
         public string ContentRating { get; set; }
-        
+
         public int IsMovie { get; set; }
     }
 }

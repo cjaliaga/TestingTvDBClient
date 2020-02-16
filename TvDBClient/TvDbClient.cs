@@ -1,4 +1,6 @@
 ﻿using System.Net.Http;
+using TvDBClient.Clients;
+using TvDBClient.Series;
 
 namespace TvDBClient
 {
@@ -10,5 +12,7 @@ namespace TvDBClient
         }
 
         public ISeriesClient Series { get;}
+
+        public ISearchClient Search { get; }
     }
 }

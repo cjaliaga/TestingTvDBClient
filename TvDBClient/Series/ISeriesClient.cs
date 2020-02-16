@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using TvDBClient.Episodes;
 using TvDBClient.Models;
 
-namespace TvDBClient
+namespace TvDBClient.Series
 {
     /// <summary>
     /// Used for geting information about a specific series
@@ -27,7 +28,7 @@ namespace TvDBClient
         /// <param name="seriesId">The series ID</param>
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Returns <see cref="T:System.Threading.Tasks.Task`1" />.The task object representing the asynchronous operation.</returns>
-        Task<TvDbResponse<Series>> GetAsync(int seriesId, CancellationToken cancellationToken = default);
+        Task<TvDbResponse<Serie>> GetAsync(int seriesId, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// <para>[GET /series/{id}]</para>
@@ -36,7 +37,7 @@ namespace TvDBClient
         /// <param name="seriesId">The series ID</param>
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Returns <see cref="T:System.Threading.Tasks.Task`1" />.The task object representing the asynchronous operation.</returns>
-        Task<TvDbResponse<Series>> GetAsync(int seriesId, Action<SerieKeys> configurefilter, CancellationToken cancellationToken = default);
+        Task<TvDbResponse<Serie>> GetAsync(int seriesId, Action<SerieKeys> configurefilter, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// <para>[GET /series/{id}/episodes]</para>

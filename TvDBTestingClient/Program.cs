@@ -25,6 +25,7 @@ namespace TvDBTestingClient
             {
                 options.ApiKey = configuration["ApiKey"];
             });
+
             var provider = services.BuildServiceProvider();
 
             var tvdb = provider.GetService<TvDbClient>();
@@ -37,7 +38,8 @@ namespace TvDBTestingClient
                 .IncludeAdded()
                 .IncludeSeriesName()
                 .IncludeBanner()
-                .IncludeId();
+                .IncludeId()
+                .IncludeAirsDayOfWeek();
             });
         }
     }

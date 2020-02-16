@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace TvDBClient.Models
+namespace TvDBClient.Series
 {
     public class SerieKeys
     {
@@ -139,7 +139,7 @@ namespace TvDBClient.Models
 
         public SerieKeys IncludeAddedBy()
         {
-            _enabledKeys.Add("AddedBy");
+            _enabledKeys.Add("addedBy");
             return this;
         }
 
