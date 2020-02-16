@@ -1,4 +1,4 @@
-﻿namespace TvDBClient.Models
+﻿namespace TvDBClient.Search
 {
     /// <summary>
     /// An enum used for searching for series with <see cref="T:ISearchClient.SearchSeriesAsync"/>,
@@ -7,12 +7,8 @@
     public enum SearchParameter
     {
         Name,
-
         ImdbId,
-
-        // ReSharper disable once InconsistentNaming
         Zap2itId,
-
         Slug,
     }
 }

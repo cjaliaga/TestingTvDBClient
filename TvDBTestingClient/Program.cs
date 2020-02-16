@@ -31,7 +31,6 @@ namespace TvDBTestingClient
             var tvdb = provider.GetService<TvDbClient>();
 
             var show = await tvdb.Series.GetAsync(328724);
-
             show = await tvdb.Series.GetAsync(328724, keys =>
             {
                 keys
@@ -43,8 +42,9 @@ namespace TvDBTestingClient
             });
 
             var search = await tvdb.Search.SearchSeriesByNameAsync("sheldon");
-
             search = await tvdb.Search.SearchSeriesBySlugAsync("young-sheldon");
+
+            var episode = await tvdb.Episodes.GetAsync(6794892);
         }
     }
 }

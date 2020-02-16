@@ -6,7 +6,7 @@ using TvDBClient.Models;
 
 namespace TvDBClient.Search
 {
-    public class SearchClient : ISearchClient
+    internal class SearchClient : ISearchClient
     {
         private readonly HttpClient _client;
 
