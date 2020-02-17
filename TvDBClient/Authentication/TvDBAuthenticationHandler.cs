@@ -9,18 +9,18 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
-namespace TvDBClient
+namespace TvDBClient.Authentication
 {
     internal class TvDBAuthenticationHandler : DelegatingHandler
     {
         private readonly TvdbClientOptions _options;
         private readonly ILogger<TvDBAuthenticationHandler> _logger;
-        private readonly TokenAccessor _tokenAccessor;
+        private readonly TvDBTokenAccessor _tokenAccessor;
 
         public TvDBAuthenticationHandler(
             IOptions<TvdbClientOptions> options,
             ILogger<TvDBAuthenticationHandler> logger,
-            TokenAccessor tokenAccessor)
+            TvDBTokenAccessor tokenAccessor)
         {
             _options = options.Value;
             _logger = logger;
@@ -76,15 +76,5 @@ namespace TvDBClient
         {
             request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
         }
-    }
-
-    internal class TokenResponse
-    {
-        public string Token { get; set; }
-    }
-
-    internal class AuthData
-    {
-        public string ApiKey { get; set; }
     }
 }

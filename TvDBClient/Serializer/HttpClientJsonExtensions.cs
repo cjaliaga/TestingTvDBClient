@@ -26,6 +26,17 @@ namespace System.Net.Http
         }
 
         /// <summary>
+        /// Sends a DELETE request to the specified URI, and parses the JSON response body
+        /// to create an object of the generic type.
+        /// </summary>
+        /// <typeparam name="T">A type into which the response body can be JSON-deserialized.</typeparam>
+        /// <param name="httpClient">The <see cref="HttpClient"/>.</param>
+        /// <param name="requestUri">The URI that the request will be sent to.</param>
+        /// <returns>The response parsed as an object of the generic type.</returns>
+        public static Task<T> DeleteJsonAsync<T>(this HttpClient httpClient, string requestUri, CancellationToken cancellationToken = default)
+            => httpClient.SendJsonAsync<T>(HttpMethod.Delete, requestUri, null, cancellationToken);
+
+        /// <summary>
         /// Sends a POST request to the specified URI, including the specified <paramref name="content"/>
         /// in JSON-encoded format, and parses the JSON response body to create an object of the generic type.
         /// </summary>
@@ -57,6 +68,28 @@ namespace System.Net.Http
         /// <param name="content">Content for the request body. This will be JSON-encoded and sent as a string.</param>
         public static Task PutJsonAsync(this HttpClient httpClient, string requestUri, object content, CancellationToken cancellationToken = default)
             => httpClient.SendJsonAsync(HttpMethod.Put, requestUri, content, cancellationToken);
+
+        /// <summary>
+        /// Sends a PUT request to the specified URI, including the specified <paramref name="content"/>
+        /// in JSON-encoded format.
+        /// </summary>
+        /// <param name="httpClient">The <see cref="HttpClient"/>.</param>
+        /// <param name="requestUri">The URI that the request will be sent to.</param>
+        /// <param name="content">Content for the request body. This will be JSON-encoded and sent as a string.</param>
+        public static Task PutJsonAsync(this HttpClient httpClient, string requestUri, CancellationToken cancellationToken = default)
+            => httpClient.PutJsonAsync(requestUri, null, cancellationToken);
+
+        /// <summary>
+        /// Sends a PUT request to the specified URI, including the specified <paramref name="content"/>
+        /// in JSON-encoded format, and parses the JSON response body to create an object of the generic type.
+        /// </summary>
+        /// <typeparam name="T">A type into which the response body can be JSON-deserialized.</typeparam>
+        /// <param name="httpClient">The <see cref="HttpClient"/>.</param>
+        /// <param name="requestUri">The URI that the request will be sent to.</param>
+        /// <param name="content">Content for the request body. This will be JSON-encoded and sent as a string.</param>
+        /// <returns>The response parsed as an object of the generic type.</returns>
+        public static Task<T> PutJsonAsync<T>(this HttpClient httpClient, string requestUri, CancellationToken cancellationToken = default)
+            => httpClient.PutJsonAsync<T>(requestUri, null, cancellationToken);
 
         /// <summary>
         /// Sends a PUT request to the specified URI, including the specified <paramref name="content"/>

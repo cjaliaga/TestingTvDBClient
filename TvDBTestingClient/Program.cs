@@ -45,6 +45,11 @@ namespace TvDBTestingClient
             search = await tvdb.Search.SearchSeriesBySlugAsync("young-sheldon");
 
             var episode = await tvdb.Episodes.GetAsync(6794892);
+
+            await tvdb.Authentication.AuthenticateAsync(configuration["Username"], configuration["UserKey"]);
+
+            var rating = await tvdb.Users.AddRatingAsync(TvDBClient.Users.RatingType.Series, 328724, 10);
+            var favorite = await tvdb.Users.AddToFavoritesAsync(328724);
         }
     }
 }

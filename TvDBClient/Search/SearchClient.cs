@@ -15,9 +15,9 @@ namespace TvDBClient.Search
             _client = client;
         }
 
-        public async Task<TvDbResponse<SeriesSearchResult[]>> SearchSeriesAsync(string value, SearchParameter parameterKey, CancellationToken cancellationToken = default)
+        public Task<TvDbResponse<SeriesSearchResult[]>> SearchSeriesAsync(string value, SearchParameter parameterKey, CancellationToken cancellationToken = default)
         {
-            return await SearchSeriesAsync(value, parameterKey.ToString(), cancellationToken);
+            return SearchSeriesAsync(value, parameterKey.ToString(), cancellationToken);
         }
 
         public async Task<TvDbResponse<SeriesSearchResult[]>> SearchSeriesAsync(string value, string parameterKey, CancellationToken cancellationToken = default)
@@ -26,24 +26,24 @@ namespace TvDBClient.Search
             return await _client.GetJsonAsync<TvDbResponse<SeriesSearchResult[]>>(url, cancellationToken).ConfigureAwait(false);
         }
 
-        public async Task<TvDbResponse<SeriesSearchResult[]>> SearchSeriesByImdbIdAsync(string imdbId, CancellationToken cancellationToken = default)
+        public Task<TvDbResponse<SeriesSearchResult[]>> SearchSeriesByImdbIdAsync(string imdbId, CancellationToken cancellationToken = default)
         {
-            return await SearchSeriesAsync(imdbId, SearchParameter.ImdbId, cancellationToken);
+            return SearchSeriesAsync(imdbId, SearchParameter.ImdbId, cancellationToken);
         }
 
-        public async Task<TvDbResponse<SeriesSearchResult[]>> SearchSeriesByNameAsync(string name, CancellationToken cancellationToken = default)
+        public Task<TvDbResponse<SeriesSearchResult[]>> SearchSeriesByNameAsync(string name, CancellationToken cancellationToken = default)
         {
-            return await SearchSeriesAsync(name, SearchParameter.Name, cancellationToken);
+            return SearchSeriesAsync(name, SearchParameter.Name, cancellationToken);
         }
 
-        public async Task<TvDbResponse<SeriesSearchResult[]>> SearchSeriesBySlugAsync(string slug, CancellationToken cancellationToken = default)
+        public Task<TvDbResponse<SeriesSearchResult[]>> SearchSeriesBySlugAsync(string slug, CancellationToken cancellationToken = default)
         {
-            return await SearchSeriesAsync(slug, SearchParameter.Slug, cancellationToken);
+            return SearchSeriesAsync(slug, SearchParameter.Slug, cancellationToken);
         }
 
-        public async Task<TvDbResponse<SeriesSearchResult[]>> SearchSeriesByZap2ItIdAsync(string zap2ItId, CancellationToken cancellationToken = default)
+        public Task<TvDbResponse<SeriesSearchResult[]>> SearchSeriesByZap2ItIdAsync(string zap2ItId, CancellationToken cancellationToken = default)
         {
-            return await SearchSeriesAsync(zap2ItId, SearchParameter.Zap2itId, cancellationToken);
+            return SearchSeriesAsync(zap2ItId, SearchParameter.Zap2itId, cancellationToken);
         }
     }
 }

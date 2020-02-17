@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Options;
 using System;
 using TvDBClient;
+using TvDBClient.Authentication;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -12,7 +13,7 @@ namespace Microsoft.Extensions.DependencyInjection
 
             services.Configure(configureOptions);
 
-            services.AddScoped<TokenAccessor>();
+            services.AddScoped<TvDBTokenAccessor>();
 
             services.AddTransient<TvDBAuthenticationHandler>();
 

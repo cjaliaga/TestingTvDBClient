@@ -7,17 +7,6 @@ namespace TvDBClient
 {
     internal static class UrlExtensions
     {
-        public static string ToQueryParam(this Enum @enum)
-        {
-            var elements = @enum
-            .ToString()
-            .Split(',')
-            .Select(element => element.Trim().ToPascalCase())
-            .OrderBy(element => element);
-
-            return string.Join(",", elements);
-        }
-
         internal static string ToQueryParams<T>(this T obj)
         {
             var parts = new List<string>();
@@ -42,6 +31,11 @@ namespace TvDBClient
             array[0] = char.ToLower(array[0]);
 
             return new string(array);
+        }
+
+        internal static string ToPascalCase(this Enum @enum)
+        {
+            return @enum.ToString().ToPascalCase();
         }
     }
 }
