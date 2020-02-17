@@ -21,8 +21,8 @@ namespace System.Net.Http
         /// <returns>The response parsed as an object of the generic type.</returns>
         public static async Task<T> GetJsonAsync<T>(this HttpClient httpClient, string requestUri, CancellationToken cancellationToken = default)
         {
-            var stringContent = await httpClient.GetStringAsync(requestUri);
-            return JsonSerializer.Deserialize<T>(stringContent, JsonSerializerOptionsProvider.Options);
+            var response = await httpClient.GetAsync(requestUri, cancellationToken);
+            return JsonSerializer.Deserialize<T>(await response.Content.ReadAsStringAsync(), JsonSerializerOptionsProvider.Options);
         }
 
         /// <summary>
@@ -124,7 +124,9 @@ namespace System.Net.Http
         /// <param name="requestUri">The URI that the request will be sent to.</param>
         /// <param name="content">Content for the request body. This will be JSON-encoded and sent as a string.</param>
         /// <returns>The response parsed as an object of the generic type.</returns>
-        public static async Task<T> SendJsonAsync<T>(this HttpClient httpClient, HttpMethod method, string requestUri, object content, CancellationToken cancellationToken = default)
+        public static async Task<T> SendJsonAsync<T>(
+            this HttpClient httpClient, HttpMethod method, string requestUri, object content,
+            CancellationToken cancellationToken = default)
         {
             var requestJson = JsonSerializer.Serialize(content, JsonSerializerOptionsProvider.Options);
             var response = await httpClient.SendAsync(new HttpRequestMessage(method, requestUri)
